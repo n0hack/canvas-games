@@ -11,7 +11,7 @@
 - [x] Colorize game
 - [x] Shrink enemies on hit
 - [x] Create particle explosion on hit
-- [ ] Add score
+- [x] Add score
 - [ ] Add game over UI
 - [ ] Add restart button
 - [ ] Add start game button

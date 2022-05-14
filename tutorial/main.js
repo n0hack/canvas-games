@@ -4,6 +4,8 @@ const ctx = canvas.getContext('2d');
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
+const scoreEl = document.querySelector('#scoreEl');
+
 // 플레이어
 class Player {
   constructor(x, y, radius, color) {
@@ -132,6 +134,7 @@ function spawnEnemies() {
 }
 
 let animationId;
+let score = 0;
 
 function animate() {
   animationId = requestAnimationFrame(animate);
@@ -194,11 +197,19 @@ function animate() {
 
         // 적이 큰 경우 축소 시키기
         if (enemy.radius - 10 > 5) {
+          // 점수 증가
+          score += 100;
+          scoreEl.innerHTML = score;
+
           gsap.to(enemy, { radius: enemy.radius - 10 });
           setTimeout(() => {
             projectiles.splice(projectileIndex, 1);
           }, 0);
         } else {
+          // 점수 증가
+          score += 250;
+          scoreEl.innerHTML = score;
+
           setTimeout(() => {
             enemies.splice(enemyIndex, 1);
             projectiles.splice(projectileIndex, 1);
