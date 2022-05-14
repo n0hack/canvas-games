@@ -5,7 +5,7 @@
 - [x] Create a player
 - [x] Shoot projectiles
 - [x] Create enemies
-- [ ] Detect collision on enemy / projectile hit
+- [x] Detect collision on enemy / projectile hit
 - [ ] Detect collision on enemy / player hit
 - [ ] Remove off screen projectiles
 - [ ] Colorize game

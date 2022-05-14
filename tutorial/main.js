@@ -104,8 +104,18 @@ function animate() {
   projectiles.forEach((projectile) => {
     projectile.update();
   });
-  enemies.forEach((enemy) => {
+  enemies.forEach((enemy, enemyIndex) => {
     enemy.update();
+    projectiles.forEach((projectile, projectileIndex) => {
+      // hypot은 두 지점간의 거리를 알려주는 메서드
+      const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
+      if (dist - enemy.radius - projectile.radius < 1) {
+        setTimeout(() => {
+          enemies.splice(enemyIndex, 1);
+          projectiles.splice(projectileIndex, 1);
+        }, 0);
+      }
+    });
   });
 }
 
