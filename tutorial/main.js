@@ -1,15 +1,15 @@
-const canvas = document.querySelector('canvas');
+// DOM Element 연결
+const elScore = document.querySelector('#score');
+const elStartGameBtn = document.querySelector('#startBtn');
+const elModal = document.querySelector('#modal');
+const elBigScore = document.querySelector('#bigScore');
+// Canvas 초기화 (2D / 사이즈)
+const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
-
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
-const scoreEl = document.querySelector('#scoreEl');
-const startGameBtn = document.querySelector('#startGameBtn');
-const modalEl = document.querySelector('#modalEl');
-const bigScoreEl = document.querySelector('#bigScoreEl');
-
-// 플레이어
+// Player 클래스 정의
 class Player {
   constructor(x, y, radius, color) {
     this.x = x;
@@ -22,11 +22,12 @@ class Player {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     ctx.fillStyle = this.color;
+    // ctx.fill 메서드는 ctx.closePath()를 호출하지 않아도 됨
     ctx.fill();
   }
 }
 
-// 발사체
+// Projectile 클래스 정의
 class Projectile {
   constructor(x, y, radius, color, velocity) {
     this.x = x;
@@ -50,7 +51,7 @@ class Projectile {
   }
 }
 
-// 적
+// Enemy 클래스 정의
 class Enemy {
   constructor(x, y, radius, color, velocity) {
     this.x = x;
@@ -74,33 +75,37 @@ class Enemy {
   }
 }
 
-const friction = 0.99;
-// 파티클
+// Particle 클래스 정의
 class Particle {
+  // 마찰 계수
+  static friction = 0.99;
   constructor(x, y, radius, color, velocity) {
     this.x = x;
     this.y = y;
     this.radius = radius;
     this.color = color;
     this.velocity = velocity;
+    // 점차 알파값을 0으로 만들어 사라지게 할 예정
     this.alpha = 1;
   }
 
   draw() {
-    // 해당 구간만 적용할 요소들
+    // 현재 콘텍스트 상태 저장
     ctx.save();
+    // 이 이후 그려지는 도형들에 대해 투명도 조절
     ctx.globalAlpha = this.alpha;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     ctx.fillStyle = this.color;
     ctx.fill();
+    // 저장해 둔 콘텍스트 복구
     ctx.restore();
   }
 
   update() {
     this.draw();
-    this.velocity.x *= friction;
-    this.velocity.y *= friction;
+    this.velocity.x *= Particle.friction;
+    this.velocity.y *= Particle.friction;
     this.x = this.x + this.velocity.x;
     this.y = this.y + this.velocity.y;
     this.alpha -= 0.01;
@@ -110,21 +115,25 @@ class Particle {
 const x = canvas.width / 2;
 const y = canvas.height / 2;
 
-let player = new Player(x, y, 10, 'white');
-let projectiles = [];
-let enemies = [];
-let particles = [];
+// 게임 초기 설정
+let player;
+let projectiles;
+let enemies;
+let particles;
 
 function init() {
+  // 오브젝트 초기화
   player = new Player(x, y, 10, 'white');
   projectiles = [];
   enemies = [];
   particles = [];
+  // 점수 초기화
   score = 0;
-  scoreEl.innerHTML = score;
-  bigScoreEl.innerHTML = score;
+  elScore.innerHTML = score;
+  elBigScore.innerHTML = score;
 }
 
+// 적 스폰
 function spawnEnemies() {
   setInterval(() => {
     const radius = Math.random() * (30 - 4) + 4;
@@ -146,16 +155,19 @@ function spawnEnemies() {
   }, 1000);
 }
 
+// 애니메이션
 let animationId;
 let score = 0;
 
 function animate() {
   animationId = requestAnimationFrame(animate);
+  // 콘텍스트를 매순간 채움
   ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   // ctx.clearRect(0, 0, canvas.width, canvas.height);
   player.draw();
 
+  // 이펙트 처리
   particles.forEach((particle, particleIndex) => {
     if (particle.alpha <= 0) {
       particles.splice(particleIndex, 1);
@@ -163,10 +175,9 @@ function animate() {
       particle.update();
     }
   });
-
+  // 발사체 처리
   projectiles.forEach((projectile, projectileIndex) => {
     projectile.update();
-
     // 발사체 제거 (Remove from edges of screen)
     if (
       projectile.x - projectile.radius < 0 ||
@@ -179,15 +190,16 @@ function animate() {
       }, 0);
     }
   });
-
+  // 적 움직임 처리
   enemies.forEach((enemy, enemyIndex) => {
     enemy.update();
     const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y);
     // 게임 종료
     if (dist - enemy.radius - player.radius < 1) {
+      removeEventListener('click', handleClick);
       cancelAnimationFrame(animationId);
-      modalEl.style.display = 'flex';
-      bigScoreEl.innerHTML = score;
+      elModal.style.display = 'flex';
+      elBigScore.innerHTML = score;
     }
 
     projectiles.forEach((projectile, projectileIndex) => {
