@@ -1,6 +1,8 @@
-### Basic Game Checklist
+# Tutorial
 
-- [ ] Create a player
+### Todo
+
+- [x] Create a player
 - [ ] Shoot projectiles
 - [ ] Create enemies
 - [ ] Detect collision on enemy / projectile hit
