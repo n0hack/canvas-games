@@ -3,8 +3,8 @@
 ### Todo
 
 - [x] Create a player
-- [ ] Shoot projectiles
-- [ ] Create enemies
+- [x] Shoot projectiles
+- [x] Create enemies
 - [ ] Detect collision on enemy / projectile hit
 - [ ] Detect collision on enemy / player hit
 - [ ] Remove off screen projectiles
