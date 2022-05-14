@@ -14,4 +14,5 @@
 - [x] Add score
 - [x] Add start game button
 - [x] Add game over UI
-- [ ] Add restart button
+- [x] Add restart button
+- [ ] Refactoring
