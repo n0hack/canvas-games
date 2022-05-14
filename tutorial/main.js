@@ -97,15 +97,24 @@ function spawnEnemies() {
   }, 1000);
 }
 
+let animationId;
+
 function animate() {
-  requestAnimationFrame(animate);
+  animationId = requestAnimationFrame(animate);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   player.draw();
   projectiles.forEach((projectile) => {
     projectile.update();
   });
+
   enemies.forEach((enemy, enemyIndex) => {
     enemy.update();
+    const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y);
+    // 게임 종료
+    if (dist - enemy.radius - player.radius < 1) {
+      cancelAnimationFrame(animationId);
+    }
+
     projectiles.forEach((projectile, projectileIndex) => {
       // hypot은 두 지점간의 거리를 알려주는 메서드
       const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
