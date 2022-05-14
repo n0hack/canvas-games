@@ -69,12 +69,46 @@ class Enemy {
   }
 }
 
+const friction = 0.99;
+// 파티클
+class Particle {
+  constructor(x, y, radius, color, velocity) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.color = color;
+    this.velocity = velocity;
+    this.alpha = 1;
+  }
+
+  draw() {
+    // 해당 구간만 적용할 요소들
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+    ctx.restore();
+  }
+
+  update() {
+    this.draw();
+    this.velocity.x *= friction;
+    this.velocity.y *= friction;
+    this.x = this.x + this.velocity.x;
+    this.y = this.y + this.velocity.y;
+    this.alpha -= 0.01;
+  }
+}
+
 const x = canvas.width / 2;
 const y = canvas.height / 2;
 
 const player = new Player(x, y, 10, 'white');
 const projectiles = [];
 const enemies = [];
+const particles = [];
 
 function spawnEnemies() {
   setInterval(() => {
@@ -105,6 +139,15 @@ function animate() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   // ctx.clearRect(0, 0, canvas.width, canvas.height);
   player.draw();
+
+  particles.forEach((particle, particleIndex) => {
+    if (particle.alpha <= 0) {
+      particles.splice(particleIndex, 1);
+    } else {
+      particle.update();
+    }
+  });
+
   projectiles.forEach((projectile, projectileIndex) => {
     projectile.update();
 
@@ -133,6 +176,22 @@ function animate() {
       // hypot은 두 지점간의 거리를 알려주는 메서드
       const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
       if (dist - enemy.radius - projectile.radius < 1) {
+        // 파티클 이펙트 생성
+        for (let i = 0; i < enemy.radius * 2; i++) {
+          particles.push(
+            new Particle(
+              projectile.x,
+              projectile.y,
+              Math.random() * 2,
+              enemy.color,
+              {
+                x: (Math.random() - 0.5) * (Math.random() * 6),
+                y: (Math.random() - 0.5) * (Math.random() * 6),
+              }
+            )
+          );
+        }
+
         // 적이 큰 경우 축소 시키기
         if (enemy.radius - 10 > 5) {
           gsap.to(enemy, { radius: enemy.radius - 10 });

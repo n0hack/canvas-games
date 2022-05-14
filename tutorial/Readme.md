@@ -10,7 +10,7 @@
 - [x] Remove off screen projectiles
 - [x] Colorize game
 - [x] Shrink enemies on hit
-- [ ] Create particle explosion on hit
+- [x] Create particle explosion on hit
 - [ ] Add score
 - [ ] Add game over UI
 - [ ] Add restart button
