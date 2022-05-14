@@ -1,8 +1,12 @@
 # Tutorial
 
+간단하게 만들어 본 탄막 게임 🚀
+
+[게임 플레이](https://n0hack.github.io/canvas-games/tutorial/index.html)
+
 ![May-15-2022 04-16-38](https://user-images.githubusercontent.com/42988225/168445904-15d124ad-072f-4e0c-8420-1f726a97c92d.gif)
 
-### Todo
+### 개발 일정
 
 - [x] Create a player
 - [x] Shoot projectiles
@@ -18,6 +22,13 @@
 - [x] Add game over UI
 - [x] Add restart button
 - [x] Refactoring
-- [ ] Apply typescript
+- [x] Apply typescript + Webpack
 
-Canvas API \_https://developer.mozilla.org/ko/docs/Web/API/Canvas_API/Tutorial/Basic_usage
+> 소요 기간: 2022.05.14 - 2022.05.15 (2일)
+
+### 사용한 기술
+
+- [HTML5 Canvas API](https://developer.mozilla.org/ko/docs/Web/API/Canvas_API/Tutorial/Basic_usage)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Gsap](https://greensock.com/gsap/)
+- [Typescript](https://www.typescriptlang.org/)
