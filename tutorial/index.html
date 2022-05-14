@@ -8,14 +8,31 @@
     <style>
       body {
         margin: 0;
+        background: black;
         overflow: hidden;
       }
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body>
+    <!-- Score -->
     <div class="fixed text-white text-sm ml-2 mt-2 select-none">
       <span>Score: </span><span id="scoreEl">0</span>
+    </div>
+    <!-- Score Board -->
+    <div id="modalEl" class="fixed inset-0 flex items-center justify-center">
+      <div class="bg-white max-w-md w-full p-6 text-center">
+        <h1 id="bigScoreEl" class="text-4xl font-bold leading-none">0</h1>
+        <p class="text-sm text-gray-700 mb-4">Points</p>
+        <div>
+          <button
+            id="startGameBtn"
+            class="bg-blue-500 text-white w-full py-3 rounded-full text-sm"
+          >
+            Start Game
+          </button>
+        </div>
+      </div>
     </div>
     <canvas></canvas>
     <script

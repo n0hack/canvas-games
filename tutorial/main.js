@@ -5,6 +5,9 @@ canvas.width = innerWidth;
 canvas.height = innerHeight;
 
 const scoreEl = document.querySelector('#scoreEl');
+const startGameBtn = document.querySelector('#startGameBtn');
+const modalEl = document.querySelector('#modalEl');
+const bigScoreEl = document.querySelector('#bigScoreEl');
 
 // 플레이어
 class Player {
@@ -173,6 +176,8 @@ function animate() {
     // 게임 종료
     if (dist - enemy.radius - player.radius < 1) {
       cancelAnimationFrame(animationId);
+      modalEl.style.display = 'flex';
+      bigScoreEl.innerHTML = score;
     }
 
     projectiles.forEach((projectile, projectileIndex) => {
@@ -220,8 +225,7 @@ function animate() {
   });
 }
 
-// 이벤트
-window.addEventListener('click', (event) => {
+function handleClick(event) {
   const angle = Math.atan2(
     event.clientY - canvas.height / 2,
     event.clientX - canvas.width / 2
@@ -233,6 +237,15 @@ window.addEventListener('click', (event) => {
   projectiles.push(
     new Projectile(canvas.width / 2, canvas.height / 2, 5, 'white', velocity)
   );
+}
+
+startGameBtn.addEventListener('click', () => {
+  animate();
+  spawnEnemies();
+  modalEl.style.display = 'none';
+
+  // 이벤트
+  setTimeout(() => {
+    addEventListener('click', handleClick);
+  }, 0);
 });
-animate();
-spawnEnemies();
