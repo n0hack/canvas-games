@@ -133,10 +133,18 @@ function animate() {
       // hypot은 두 지점간의 거리를 알려주는 메서드
       const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
       if (dist - enemy.radius - projectile.radius < 1) {
-        setTimeout(() => {
-          enemies.splice(enemyIndex, 1);
-          projectiles.splice(projectileIndex, 1);
-        }, 0);
+        // 적이 큰 경우 축소 시키기
+        if (enemy.radius - 10 > 5) {
+          gsap.to(enemy, { radius: enemy.radius - 10 });
+          setTimeout(() => {
+            projectiles.splice(projectileIndex, 1);
+          }, 0);
+        } else {
+          setTimeout(() => {
+            enemies.splice(enemyIndex, 1);
+            projectiles.splice(projectileIndex, 1);
+          }, 0);
+        }
       }
     });
   });
